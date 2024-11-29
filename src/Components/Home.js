@@ -14,7 +14,7 @@ const products = [
         id: 2,
         name: "Smartwatch",
         price: "$80",
-        description: "Stylish smartwatch with multiple fitness features.",
+        description: "Stylish smartwatch with multiple good fitness features.",
         image: "https://images.unsplash.com/photo-1722153768985-9286321b8769?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
@@ -46,42 +46,45 @@ const HomePage = () => {
     const { addToCart } = useCart();
 
     return (
-        <div className="bg-gray-100 min-h-screen p-6">
-            <header className="bg-blue-500 text-white text-center py-4">
-                <h1 className="text-3xl font-bold">Welcome to ShopSmart</h1>
+        <div className="bg-gradient-to-t from-blue-50 to-white min-h-screen p-6">
+            <header className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center py-8 rounded-lg shadow-md">
+                <h1 className="text-4xl font-extrabold tracking-tight">Welcome to ShopSmart</h1>
+                <p className="mt-2 text-lg">Your favorite online shopping destination</p>
             </header>
-            <main className="container mx-auto mt-6">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                    Featured Products
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <main className="container mx-auto mt-8">
+                <h2 className="text-3xl font-semibold text-gray-800 mb-6">Featured Products</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            className="bg-white shadow-md rounded-lg p-4 transition-transform transform hover:scale-105"
+                            className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out transform hover:scale-105 overflow-hidden"
                         >
                             <img
                                 src={product.image}
                                 alt={product.name}
-                                className="w-full h-40 object-cover rounded-md"
+                                className="w-full h-60 object-cover rounded-t-lg transition-transform duration-300 ease-in-out transform hover:scale-110"
                             />
-                            <h3 className="text-xl font-semibold mt-2 text-gray-800">
-                                {product.name}
-                            </h3>
-                            <p className="text-gray-600">{product.description}</p>
-                            <p className="text-lg font-bold text-blue-500">{product.price}</p>
-                            <button
-                                onClick={() => addToCart(product)}
-                                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600"
-                            >
-                                Add to Cart
-                            </button>
+                            <div className="p-4">
+                                <h3 className="text-2xl font-semibold text-gray-900">{product.name}</h3>
+                                <p className="text-gray-600 text-sm mt-2">{product.description}</p>
+                                <p className="text-xl font-semibold text-blue-600 mt-4">{product.price}</p>
+                                <button
+                                    onClick={() => addToCart(product)}
+                                    className="bg-blue-600 text-white w-full py-2 rounded mt-6 hover:bg-blue-700 transition-all duration-200 ease-in-out"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
             </main>
+            <footer className="text-center text-gray-500 mt-10">
+                <p>&copy; 2024 ShopSmart - All rights reserved</p>
+            </footer>
         </div>
     );
+    
 };
 
 export default HomePage;
