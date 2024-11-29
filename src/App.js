@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+// App.jsx
+import React from "react";
+import { CartProvider } from "./Context/CartContext"
+import HomePage from "./Components/Home";
+import CartPage from "./Components/CartPage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header bg-green-500">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link bg-green-600"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [page, setPage] = React.useState("home");
+
+    return (
+        <CartProvider>
+            <div>
+                <nav className="bg-gray-800 text-white p-4 flex justify-between">
+                    <button onClick={() => setPage("home")} className="hover:underline">
+                        Home
+                    </button>
+                    <button onClick={() => setPage("cart")} className="hover:underline">
+                        Cart
+                    </button>
+                </nav>
+                {page === "home" ? <HomePage /> : <CartPage />}
+            </div>
+        </CartProvider>
+    );
+};
 
 export default App;
