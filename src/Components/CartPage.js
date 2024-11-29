@@ -6,6 +6,7 @@ const CartPage = () => {
     const { cart, removeFromCart } = useCart();
 
     return (
+
         <div className="bg-gray-100 min-h-screen p-6">
             <header className="bg-blue-500 text-white text-center py-4">
                 <h1 className="text-3xl font-bold">Your Cart</h1>
@@ -34,6 +35,12 @@ const CartPage = () => {
                                     className="bg-red-500 text-white px-4 py-2 rounded mt-4 hover:bg-red-600"
                                 >
                                     Remove
+                                </button>
+                                <button
+                                    
+                                    className="bg-green-700 text-white px-4 ml-6 py-2 rounded mt-4 hover:bg-green-900"
+                                >
+                                    Checkout
                                 </button>
                             </div>
                         ))}

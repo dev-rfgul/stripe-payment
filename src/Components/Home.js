@@ -15,28 +15,28 @@ const products = [
         name: "Smartwatch",
         price: "$80",
         description: "Stylish smartwatch with multiple fitness features.",
-        image: "https://images.unsplash.com/photo-1582719478148-d0338c1dca2f?w=500&h=500&fit=crop",
+        image: "https://images.unsplash.com/photo-1722153768985-9286321b8769?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
         id: 3,
         name: "Gaming Laptop",
         price: "$1500",
         description: "Powerful gaming laptop with high-performance graphics.",
-        image: "https://images.unsplash.com/photo-1541807084-5c52b6b91c52?w=500&h=500&fit=crop",
+        image: "https://images.unsplash.com/photo-1641623410264-948701015656?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
         id: 4,
         name: "Bluetooth Speaker",
         price: "$50",
         description: "Compact Bluetooth speaker with rich sound quality.",
-        image: "https://images.unsplash.com/photo-1559980508-28859d858450?w=500&h=500&fit=crop",
+        image: "https://plus.unsplash.com/premium_photo-1682125804795-b09be6ee57a5?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
         id: 5,
         name: "Smartphone",
         price: "$699",
         description: "Latest smartphone with an advanced camera and features.",
-        image: "https://images.unsplash.com/photo-1512499617640-c2f999b76b77?w=500&h=500&fit=crop",
+        image: "https://images.unsplash.com/photo-1720048171731-15b3d9d5473f?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
 ];
 
