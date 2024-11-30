@@ -10,6 +10,13 @@ const CheckoutPage = () => {
         address: "",
     });
 
+    const show = () => {
+        const stripeApiKey = process.env.REACT_APP_STRIPE_API_KEY;
+
+        console.log('Stripe API Key:', stripeApiKey);
+
+    }
+
     const [orderPlaced, setOrderPlaced] = useState(false);
 
     const handleInputChange = (e) => {
@@ -82,6 +89,8 @@ const CheckoutPage = () => {
                         <h2 className="text-xl font-semibold text-gray-700 mt-8">
                             Shipping Details
                         </h2>
+                        <button onClick={show}
+                            className="bg-green-500 w-11 h-11">hello world </button>
                         <form className="bg-white shadow-md rounded-lg p-4 mt-4">
                             <div className="mb-4">
                                 <label className="block text-gray-600 font-medium">

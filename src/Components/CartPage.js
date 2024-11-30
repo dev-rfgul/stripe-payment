@@ -1,6 +1,6 @@
 // CartPage.jsx
-import React, { useState } from "react";
-import {useNavigate, BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
+import React from "react";
+import {useNavigate } from "react-router-dom"; 
 import { useCart } from "../Context/CartContext"
 const CartPage = () => {
     const { cart, removeFromCart } = useCart();
@@ -20,6 +20,7 @@ const CartPage = () => {
                                 key={product.id}
                                 className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out transform hover:scale-105 overflow-hidden"
                             >
+                                
                                 <img
                                     src={product.image}
                                     alt={product.name}
