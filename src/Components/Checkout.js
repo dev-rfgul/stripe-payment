@@ -1,6 +1,7 @@
 // CheckoutPage.jsx
 import React, { useState } from "react";
 import { useCart } from "../Context/CartContext";
+import { loadStripe } from "@stripe/stripe-js"
 
 const CheckoutPage = () => {
     const { cart } = useCart();
@@ -9,12 +10,27 @@ const CheckoutPage = () => {
         email: "",
         address: "",
     });
-
-    const show = () => {
-        const stripeApiKey = process.env.REACT_APP_STRIPE_API_KEY;
-
-        console.log('Stripe API Key:', stripeApiKey);
-
+    const makePayment = async () => {
+        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+        console.log(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+        const body = {
+            products: cart
+        }
+        const headers = {
+            "Content-Type": "application/json"
+        }
+        const response = await fetch(`${apiURL}/create-checkout-session`, {
+            methord: "POST",
+            headers: headers,
+            body: JSON.stringify(body)
+        })
+        const session = await response.json();
+        const result = stripe.redirectToCheckout({
+            sessionId: session.id
+        });
+        if (result.error) {
+            console.log(result.error)
+        }
     }
 
     const [orderPlaced, setOrderPlaced] = useState(false);
@@ -89,7 +105,7 @@ const CheckoutPage = () => {
                         <h2 className="text-xl font-semibold text-gray-700 mt-8">
                             Shipping Details
                         </h2>
-                        <button onClick={show}
+                        <button onClick={makePayment}
                             className="bg-green-500 w-11 h-11">hello world </button>
                         <form className="bg-white shadow-md rounded-lg p-4 mt-4">
                             <div className="mb-4">
@@ -136,7 +152,7 @@ const CheckoutPage = () => {
                             </div>
                         </form>
                         <button
-                            onClick={handleCheckout}
+                            onClick={() => { handleCheckout(); makePayment() }}
                             className="bg-blue-500 text-white px-6 py-2 rounded mt-4 hover:bg-blue-600 w-full"
                         >
                             Confirm Order
