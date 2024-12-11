@@ -1,39 +1,88 @@
-// CheckoutPage.jsx
-import React, { useState } from "react";
+
+
+import React, { useState, useEffect } from "react";
 import { useCart } from "../Context/CartContext";
-import { loadStripe } from "@stripe/stripe-js"
+import { loadStripe } from "@stripe/stripe-js";
 
 const CheckoutPage = () => {
     const { cart } = useCart();
+    const [orderPlaced, setOrderPlaced] = useState(false);
+    const apiUrl = process.env.REACT_APP_API_URL;
     const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
         address: "",
     });
-    const makePayment = async () => {
-        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
-        console.log(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
-        const body = {
-            products: cart
-        }
-        const headers = {
-            "Content-Type": "application/json"
-        }
-        const response = await fetch(`${apiURL}/create-checkout-session`, {
-            methord: "POST",
-            headers: headers,
-            body: JSON.stringify(body)
-        })
-        const session = await response.json();
-        const result = stripe.redirectToCheckout({
-            sessionId: session.id
-        });
-        if (result.error) {
-            console.log(result.error)
-        }
-    }
 
-    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [googlePayClient, setGooglePayClient] = useState(null);
+
+    useEffect(() => {
+        const client = new window.google.payments.api.PaymentsClient({
+            environment: "TEST", // Use "PRODUCTION" in production
+        });
+        setGooglePayClient(client);
+    }, []);
+
+    const makePayment = async () => {
+        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+        const body = { products: cart };
+        const headers = { "Content-Type": "application/json" };
+        const response = await fetch(`${apiUrl}/create-checkout-session`, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(body),
+        });
+        const session = await response.json();
+        const result = stripe.redirectToCheckout({ sessionId: session.id });
+        if (result.error) {
+            console.log(result.error);
+        }
+    };
+
+    const createGooglePayButton = () => {
+        if (googlePayClient) {
+            const button = googlePayClient.createButton({
+                onClick: handleGooglePay,
+            });
+            const googlePayButtonContainer = document.getElementById("google-pay-button-container");
+            googlePayButtonContainer.appendChild(button);
+        }
+    };
+
+    const handleGooglePay = async () => {
+        const paymentDataRequest = {
+            apiVersion: 2,
+            apiVersionMinor: 0,
+            allowedPaymentMethods: [
+                {
+                    type: "CARD",
+                    parameters: {
+                        allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+                        allowedCardNetworks: ["MASTERCARD", "VISA"],
+                    },
+                    tokenizationSpecification: {
+                        type: "PAYMENT_GATEWAY",
+                        parameters: {
+                            gateway: "example", // Replace with your payment gateway
+                            gatewayMerchantId: "exampleMerchantId",
+                        },
+                    },
+                },
+            ],
+            merchantInfo: {
+                merchantName: "Example Merchant",
+            },
+            transactionInfo: {
+                totalPriceStatus: "FINAL",
+                totalPrice: totalPrice.toFixed(2),
+                currencyCode: "USD",
+            },
+        };
+
+        const paymentData = await googlePayClient.loadPaymentData(paymentDataRequest);
+        console.log("Payment Data:", paymentData);
+        // Process payment data on the server here
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -53,21 +102,9 @@ const CheckoutPage = () => {
         return total + priceNumber;
     }, 0);
 
-    if (orderPlaced) {
-        return (
-            <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
-                <h1 className="text-2xl font-bold text-green-600">
-                    Order Placed Successfully!
-                </h1>
-                <p className="text-gray-700 mt-4">
-                    Thank you, {userDetails.name}. Your order will be delivered to:
-                </p>
-                <p className="font-semibold text-gray-800">{userDetails.address}</p>
-                <p className="mt-2">You will receive a confirmation email at:</p>
-                <p className="font-semibold text-gray-800">{userDetails.email}</p>
-            </div>
-        );
-    }
+    useEffect(() => {
+        createGooglePayButton();
+    }, [googlePayClient]);
 
     return (
         <div className="bg-gray-100 min-h-screen p-6">
@@ -105,8 +142,6 @@ const CheckoutPage = () => {
                         <h2 className="text-xl font-semibold text-gray-700 mt-8">
                             Shipping Details
                         </h2>
-                        <button onClick={makePayment}
-                            className="bg-green-500 w-11 h-11">hello world </button>
                         <form className="bg-white shadow-md rounded-lg p-4 mt-4">
                             <div className="mb-4">
                                 <label className="block text-gray-600 font-medium">
@@ -152,11 +187,12 @@ const CheckoutPage = () => {
                             </div>
                         </form>
                         <button
-                            onClick={() => { handleCheckout(); makePayment() }}
+                            onClick={handleCheckout}
                             className="bg-blue-500 text-white px-6 py-2 rounded mt-4 hover:bg-blue-600 w-full"
                         >
                             Confirm Order
                         </button>
+                        <div id="google-pay-button-container" className="mt-4"></div>
                     </>
                 ) : (
                     <p className="text-gray-600 text-center">Your cart is empty.</p>
